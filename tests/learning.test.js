@@ -5,6 +5,7 @@ import {
   paginate,
   progressPercent,
   readProgress,
+  saveProgress,
   sanitizeProgress,
   toggleLesson,
 } from "../src/lib/progress.js";
@@ -100,4 +101,42 @@ test("a paginação mantém os itens corretos, inclusive ao reduzir a lista com 
     totalPages: 1,
     currentPage: 1,
   });
+});
+
+test("salvamento persiste uma cópia JSON do progresso na chave do portal", () => {
+  const progress = { arduino: { completedLessons: ["aula-1"] } };
+  let savedKey, savedValue;
+  assert.equal(
+    saveProgress(
+      {
+        setItem(key, value) {
+          savedKey = key;
+          savedValue = value;
+        },
+      },
+      progress,
+    ),
+    true,
+  );
+  assert.equal(savedKey, "orbita-progress-v1");
+  assert.deepEqual(JSON.parse(savedValue), progress);
+});
+
+test("falha de armazenamento é informada sem impedir o uso do progresso em memória", () => {
+  const progress = { arduino: { completedLessons: [] } };
+  assert.equal(
+    saveProgress(
+      {
+        setItem() {
+          throw new Error("Sem espaço");
+        },
+      },
+      progress,
+    ),
+    false,
+  );
+  assert.deepEqual(
+    toggleLesson(progress, "arduino", "aula-1").arduino.completedLessons,
+    ["aula-1"],
+  );
 });

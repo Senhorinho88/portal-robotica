@@ -6,6 +6,7 @@ import { selectCatalog } from "./lib/catalog.js";
 import Accordion from "./components/Accordion.jsx";
 import LearningPath from "./components/LearningPath.jsx";
 import ContinueLearning from "./components/ContinueLearning.jsx";
+import StorageNotice from "./components/StorageNotice.jsx";
 import { learningPath } from "./data/learningPath.js";
 import CourseCard from "./components/CourseCard.jsx";
 import CourseDetails from "./components/CourseDetails.jsx";
@@ -244,6 +245,7 @@ export default function App() {
             Sua bancada digital <Icon name="code" size={17} />
           </span>
         </div>
+        <StorageNotice />
         <section
           className="welcome"
           id="inicio"

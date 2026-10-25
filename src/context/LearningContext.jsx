@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { courses } from "../data/courses.js";
-import { readProgress, STORAGE_KEY, toggleLesson } from "../lib/progress.js";
+import { readProgress, saveProgress, toggleLesson } from "../lib/progress.js";
 
 const LearningContext = createContext(null);
 
@@ -20,13 +20,14 @@ export function LearningProvider({ children }) {
     }
   });
   const [toasts, setToasts] = useState([]);
+  const [storageAvailable, setStorageAvailable] = useState(true);
   const nextToastId = useRef(0);
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      setStorageAvailable(saveProgress(window.localStorage, progress));
     } catch {
-      /* O progresso continua disponível durante a sessão se o armazenamento estiver bloqueado. */
+      setStorageAvailable(false);
     }
   }, [progress]);
 
@@ -63,7 +64,15 @@ export function LearningProvider({ children }) {
 
   return (
     <LearningContext.Provider
-      value={{ progress, toasts, notify, dismissToast, enroll, changeLesson }}
+      value={{
+        progress,
+        toasts,
+        notify,
+        dismissToast,
+        enroll,
+        changeLesson,
+        storageAvailable,
+      }}
     >
       {children}
     </LearningContext.Provider>

@@ -28,6 +28,15 @@ export function readProgress(storage, courses) {
   }
 }
 
+export function saveProgress(storage, progress) {
+  try {
+    storage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function progressPercent(completed, total) {
   if (!total) return 0;
   return Math.min(100, Math.max(0, Math.round((completed / total) * 100)));

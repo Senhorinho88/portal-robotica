@@ -27,7 +27,10 @@ Consulte a [proposta, a jornada do aluno e as entregas incrementais](docs/PROJET
 
 ## Funcionalidades
 
+- Trilha recomendada de fundamentos, eletrônica e robótica, com acesso aos cursos.
+- Retomada da primeira aula pendente nos cursos iniciados.
 - Busca por título, categoria ou nível, com tratamento de acentos.
+- Ordenação por recomendação, menor duração ou título, combinada com os filtros.
 - Filtro de nível com menu suspenso e navegação por teclado.
 - Catálogo paginado, com três cursos por página.
 - Abas de descrição, aulas e materiais de cada curso.
@@ -35,7 +38,8 @@ Consulte a [proposta, a jornada do aluno e as entregas incrementais](docs/PROJET
 - Barra de progresso sincronizada com as aulas e os indicadores do painel.
 - Lista de cursos iniciados em **Meu aprendizado**.
 - Perguntas frequentes em acordeão e notificações temporárias.
-- Persistência no navegador e recuperação de dados inválidos.
+- Checklist de materiais em arquivo de texto, gerado no próprio navegador.
+- Persistência no navegador, recuperação de dados inválidos e aviso de falha de armazenamento.
 
 ## Organização
 
@@ -49,16 +53,22 @@ src/
     Tabs.jsx                    # Aba ativa, painéis e controle por teclado
     DropdownMenu.jsx            # Opções, seleção e fechamento externo
     ToastNotification.jsx       # Feedback com fechamento manual e temporizado
+    LearningPath.jsx             # Sequência de três etapas sugeridas
+    ContinueLearning.jsx         # Próxima aula pendente
+    StorageNotice.jsx            # Aviso sobre armazenamento indisponível
     CourseCard.jsx              # Resumo de cada curso
     CourseDetails.jsx           # Ementa, aulas, materiais e progresso
     Icon.jsx                    # Ícones SVG
     RobotArt.jsx                # Ilustrações SVG dos projetos
   context/LearningContext.jsx   # Estado compartilhado de aprendizado e feedback
   data/courses.js               # Cursos, aulas, materiais e perguntas
+  lib/catalog.js                # Busca, filtros e ordenação
+  lib/resume.js                 # Seleção da próxima aula pendente
+  lib/materials.js              # Geração do checklist de materiais
   lib/progress.js               # Regras de progresso e paginação
   main.jsx                      # Entrada da aplicação e provider
   styles.css                    # Layout, estados e regras responsivas
-tests/learning.test.js          # Testes das regras de negócio
+tests/                          # Testes de progresso, catálogo, retomada e materiais
 ```
 
 ## Componentes e conceitos React
@@ -74,6 +84,8 @@ tests/learning.test.js          # Testes das regras de negócio
 
 **Context API:** o `LearningProvider` compartilha o progresso entre o painel, os cartões e os detalhes do curso. Também conecta as ações às notificações, sem repassar essas informações por todos os componentes intermediários. Esse é o recurso de estado global do desafio extra.
 
+Quando o armazenamento não estiver disponível, o contexto mantém o progresso em memória e mostra um aviso visível sobre os limites dessa sessão.
+
 As alterações de estado usam atualizações imutáveis. Os efeitos de temporizador e de eventos removem seus recursos ao desmontar o componente. A entrada e saída de dados do armazenamento são protegidas contra JSON inválido e indisponibilidade.
 
 ## Conferência manual
@@ -86,7 +98,11 @@ As alterações de estado usam atualizações imutáveis. Os efeitos de temporiz
 6. Atualize a página e confira se os dados persistiram. Abra Meu aprendizado.
 7. Abra e feche o FAQ. No menu de níveis, selecione uma opção, clique fora e use Escape.
 8. Navegue com Tab, Shift+Tab, setas, Home, End, Enter e Espaço onde aplicável.
-9. Confira o layout em celular, tablet e desktop, incluindo o menu móvel e textos longos.
+9. Abra uma etapa da trilha e confira se os detalhes correspondem ao curso escolhido.
+10. Ordene por menor duração e por título. Combine a ordenação com busca, nível e Meus cursos.
+11. Clique em Retomar aula e confira se a aba Aulas abre com o progresso preservado.
+12. Na aba Materiais, baixe o checklist e confira o curso e os itens do arquivo.
+13. Confira o layout em celular, tablet e desktop, incluindo o menu móvel e textos longos.
 
 ## Escopo
 
