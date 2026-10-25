@@ -23,6 +23,8 @@ npm run preview # Conferência da versão de produção
 
 Com o arquivo `package-lock.json` disponível, utilize `npm ci` para instalar exatamente as versões registradas.
 
+Consulte a [proposta, a jornada do aluno e as entregas incrementais](docs/PROJETO.md).
+
 ## Funcionalidades
 
 - Busca por título, categoria ou nível, com tratamento de acentos.
