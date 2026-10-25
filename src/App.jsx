@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { courses, faqItems } from "./data/courses.js";
 import { useLearning } from "./context/LearningContext.jsx";
 import { paginate } from "./lib/progress.js";
+import { selectCatalog } from "./lib/catalog.js";
 import Accordion from "./components/Accordion.jsx";
 import LearningPath from "./components/LearningPath.jsx";
 import { learningPath } from "./data/learningPath.js";
@@ -19,6 +20,11 @@ const levelOptions = [
   "Intermediário",
   "Avançado",
 ].map((label, i) => ({ value: i === 0 ? "all" : label, label }));
+const sortOptions = [
+  { value: "recommended", label: "Recomendados" },
+  { value: "duration", label: "Menor duração" },
+  { value: "title", label: "Título (A–Z)" },
+];
 const PAGE_SIZE = 3;
 
 function Brand() {
@@ -38,6 +44,7 @@ export default function App() {
   const { progress } = useLearning();
   const [selectedCourse, setSelectedCourse] = useState(courses[0]);
   const [level, setLevel] = useState("all");
+  const [sort, setSort] = useState("recommended");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [showMyCourses, setShowMyCourses] = useState(false);
@@ -74,24 +81,17 @@ export default function App() {
     (total, course) => total + course.completedLessons.length,
     0,
   );
-  const filteredCourses = useMemo(() => {
-    const normalizedQuery = query
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLocaleLowerCase("pt-BR")
-      .trim();
-    return courses.filter((course) => {
-      const text = `${course.title} ${course.category} ${course.level}`
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLocaleLowerCase("pt-BR");
-      return (
-        (level === "all" || course.level === level) &&
-        text.includes(normalizedQuery) &&
-        (!showMyCourses || progress[course.id])
-      );
-    });
-  }, [level, query, showMyCourses, progress]);
+  const filteredCourses = useMemo(
+    () =>
+      selectCatalog(courses, {
+        query,
+        level,
+        sort,
+        enrolledOnly: showMyCourses,
+        progress,
+      }),
+    [level, query, sort, showMyCourses, progress],
+  );
   const pagination = paginate(filteredCourses, page, PAGE_SIZE);
 
   function navigate(section, mine = false) {
@@ -100,6 +100,7 @@ export default function App() {
     if (section === "cursos") {
       setShowMyCourses(mine);
       setLevel("all");
+      setSort("recommended");
       setQuery("");
       setPage(1);
     }
@@ -397,6 +398,15 @@ export default function App() {
                   }}
                 />
               </label>
+              <DropdownMenu
+                label="Ordenar cursos"
+                options={sortOptions}
+                value={sort}
+                onChange={(value) => {
+                  setSort(value);
+                  setPage(1);
+                }}
+              />
               <DropdownMenu
                 label="Filtrar por nível"
                 options={levelOptions}

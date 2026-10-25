@@ -2195,3 +2195,19 @@ main {
     gap: 12px;
   }
 }
+
+.catalog-filters {
+  flex-wrap: wrap;
+}
+@media (max-width: 700px) {
+  .catalog-filters .search-field {
+    flex-basis: 100%;
+  }
+  .catalog-filters > .dropdown {
+    flex: 1;
+    min-width: 0;
+  }
+  .catalog-filters .dropdown-trigger {
+    width: 100%;
+  }
+}
