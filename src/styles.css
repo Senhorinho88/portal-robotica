@@ -2211,3 +2211,64 @@ main {
     width: 100%;
   }
 }
+
+.continue-learning {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 21px 24px;
+}
+.resume-copy {
+  flex: 1;
+  min-width: 0;
+}
+.resume-copy .eyebrow {
+  font-size: 8px;
+}
+.resume-copy h2 {
+  margin-top: 7px;
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+}
+.resume-copy > p:not(.eyebrow) {
+  font-size: 10px;
+  color: #68735f;
+  line-height: 1.7;
+  margin-top: 5px;
+}
+.resume-copy .progress-component {
+  margin-top: 11px;
+  max-width: 330px;
+}
+.resume-copy .progress-track {
+  height: 4px;
+}
+.continue-learning .button {
+  white-space: nowrap;
+}
+@media (max-width: 960px) {
+  .continue-learning {
+    flex-wrap: wrap;
+    padding: 19px;
+  }
+  .continue-learning > .button {
+    margin-left: 55px;
+  }
+}
+@media (max-width: 700px) {
+  .continue-learning {
+    gap: 12px;
+    padding: 20px;
+  }
+  .continue-learning > .stat-icon {
+    display: none;
+  }
+  .resume-copy {
+    flex-basis: 100%;
+  }
+  .continue-learning > .button {
+    margin-left: 0;
+  }
+}

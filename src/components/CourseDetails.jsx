@@ -4,7 +4,7 @@ import Icon from "./Icon.jsx";
 import ProgressBar from "./ProgressBar.jsx";
 import Tabs from "./Tabs.jsx";
 
-export default function CourseDetails({ course }) {
+export default function CourseDetails({ course, initialTab = "sobre" }) {
   const { progress, enroll, changeLesson } = useLearning();
   const enrollment = progress[course.id];
   const completed = enrollment?.completedLessons ?? [];
@@ -134,7 +134,7 @@ export default function CourseDetails({ course }) {
           {completed.length} de {course.lessons.length} aulas concluídas
         </span>
       </div>
-      <Tabs key={course.id} items={items} />
+      <Tabs key={course.id} items={items} initialActiveId={initialTab} />
     </section>
   );
 }

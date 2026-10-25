@@ -1,7 +1,16 @@
 import { useId, useRef, useState } from "react";
 
-export default function Tabs({ items, label = "Detalhes do curso" }) {
-  const [active, setActive] = useState(0);
+export default function Tabs({
+  items,
+  label = "Detalhes do curso",
+  initialActiveId,
+}) {
+  const [active, setActive] = useState(() =>
+    Math.max(
+      0,
+      items.findIndex((item) => item.id === initialActiveId),
+    ),
+  );
   const tabRefs = useRef([]);
   const tabsId = useId();
 

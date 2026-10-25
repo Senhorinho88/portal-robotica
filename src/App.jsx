@@ -5,6 +5,7 @@ import { paginate } from "./lib/progress.js";
 import { selectCatalog } from "./lib/catalog.js";
 import Accordion from "./components/Accordion.jsx";
 import LearningPath from "./components/LearningPath.jsx";
+import ContinueLearning from "./components/ContinueLearning.jsx";
 import { learningPath } from "./data/learningPath.js";
 import CourseCard from "./components/CourseCard.jsx";
 import CourseDetails from "./components/CourseDetails.jsx";
@@ -42,7 +43,12 @@ function Brand() {
 
 export default function App() {
   const { progress } = useLearning();
-  const [selectedCourse, setSelectedCourse] = useState(courses[0]);
+  const [selection, setSelection] = useState({
+    course: courses[0],
+    tab: "sobre",
+    revision: 0,
+  });
+  const selectedCourse = selection.course;
   const [level, setLevel] = useState("all");
   const [sort, setSort] = useState("recommended");
   const [query, setQuery] = useState("");
@@ -106,8 +112,12 @@ export default function App() {
     }
   }
 
-  function selectCourse(course) {
-    setSelectedCourse(course);
+  function selectCourse(course, initialTab = "sobre") {
+    setSelection((current) => ({
+      course,
+      tab: initialTab,
+      revision: current.revision + 1,
+    }));
     window.requestAnimationFrame(() => {
       document.getElementById("detalhes")?.scrollIntoView({
         behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -333,6 +343,12 @@ export default function App() {
           </div>
         </section>
 
+        <ContinueLearning
+          courses={courses}
+          progress={progress}
+          onContinue={selectCourse}
+        />
+
         <LearningPath
           steps={learningPath}
           courses={courses}
@@ -480,7 +496,11 @@ export default function App() {
           )}
         </section>
 
-        <CourseDetails course={selectedCourse} />
+        <CourseDetails
+          key={selection.revision}
+          course={selectedCourse}
+          initialTab={selection.tab}
+        />
 
         <section
           className="help-section"
