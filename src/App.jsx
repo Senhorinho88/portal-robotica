@@ -3,6 +3,8 @@ import { courses, faqItems } from "./data/courses.js";
 import { useLearning } from "./context/LearningContext.jsx";
 import { paginate } from "./lib/progress.js";
 import Accordion from "./components/Accordion.jsx";
+import LearningPath from "./components/LearningPath.jsx";
+import { learningPath } from "./data/learningPath.js";
 import CourseCard from "./components/CourseCard.jsx";
 import CourseDetails from "./components/CourseDetails.jsx";
 import DropdownMenu from "./components/DropdownMenu.jsx";
@@ -106,15 +108,12 @@ export default function App() {
   function selectCourse(course) {
     setSelectedCourse(course);
     window.requestAnimationFrame(() => {
-      document
-        .getElementById("detalhes")
-        ?.scrollIntoView({
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-            .matches
-            ? "auto"
-            : "smooth",
-          block: "start",
-        });
+      document.getElementById("detalhes")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
       document.getElementById("detail-title")?.focus({ preventScroll: true });
     });
   }
@@ -133,6 +132,12 @@ export default function App() {
       title: "Meu aprendizado",
       icon: "chart",
       mine: true,
+    },
+    {
+      id: "trilha",
+      href: "#trilha",
+      title: "Trilha recomendada",
+      icon: "flag",
     },
     { id: "ajuda", href: "#ajuda", title: "Central de ajuda", icon: "help" },
   ];
@@ -326,6 +331,13 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <LearningPath
+          steps={learningPath}
+          courses={courses}
+          progress={progress}
+          onSelect={selectCourse}
+        />
 
         <section
           className="catalog"
