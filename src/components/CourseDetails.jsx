@@ -1,5 +1,6 @@
 import { useLearning } from "../context/LearningContext.jsx";
 import { progressPercent } from "../lib/progress.js";
+import { materialChecklistUrl } from "../lib/materials.js";
 import Icon from "./Icon.jsx";
 import ProgressBar from "./ProgressBar.jsx";
 import Tabs from "./Tabs.jsx";
@@ -81,15 +82,25 @@ export default function CourseDetails({ course, initialTab = "sobre" }) {
               </li>
             ))}
           </ul>
-          <a
-            className="text-link"
-            href="https://www.tinkercad.com/circuits"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Conhecer o Tinkercad Circuits <Icon name="arrow" size={16} />
-            <span className="sr-only">(abre em nova aba)</span>
-          </a>
+          <div className="material-actions">
+            <a
+              className="button checklist-download"
+              href={materialChecklistUrl(course)}
+              download={`${course.id}-materiais.txt`}
+            >
+              Baixar checklist (.txt)
+              <Icon name="arrow" size={16} />
+            </a>
+            <a
+              className="text-link"
+              href="https://www.tinkercad.com/circuits"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Conhecer o Tinkercad Circuits <Icon name="arrow" size={16} />
+              <span className="sr-only">(abre em nova aba)</span>
+            </a>
+          </div>
         </div>
       ),
     },
